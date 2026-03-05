@@ -12,6 +12,12 @@ A modern web application for creating, managing, and organizing sticky notes wit
 - 🎨 **Color Coded**: Notes are automatically assigned different colors
 - 📐 **Responsive**: Works seamlessly on different screen sizes
 
+## Screenshot
+
+![App preview](./screenshots/app-preview.png)
+
+*A preview of the running application in the browser, showing several notes and the localStorage contents.*
+
 ## Installation
 
 ### Prerequisites
