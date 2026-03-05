@@ -1,3 +1,6 @@
+// NoteView represents a single sticky note. It handles its own drag, resize, and text editing interactions. To keep performance high, visual
+// dragging uses CSS transforms and transient state; actual changes are committed via callbacks only when the pointer action ends.
+
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import type { Note, Rect } from "../domain/types";
 import { applyMinSize, moveRect, resizeRect } from "../domain/geometry";
@@ -12,7 +15,7 @@ type Props = {
   onCommitText: (id: string, text: string) => void;
   onDragEndCheckTrash: (id: string, rect: Rect) => void;
 
-  // feedback para trash mientras arrastra
+  // Trash feedback: optional callback to inform parent of current rect during drag so the board can highlight the trash zone.
   onDraggingRect?: (rect: Rect | null) => void;
   isOverTrash?: boolean;
 };
@@ -35,7 +38,7 @@ export function NoteView({
   const startPointer = useRef<{ x: number; y: number } | null>(null);
   const startRect = useRef<Rect | null>(null);
 
-  // rect “final” que vamos a comitear
+  // Rect “final” rect to commit at end of drag (updated during drag for trash feedback)
   const pendingRect = useRef<Rect | null>(null);
 
   const [dragging, setDragging] = useState(false);
@@ -59,7 +62,8 @@ export function NoteView({
   }, [note.rect.x, note.rect.y, note.rect.w, note.rect.h, note.zIndex, note.color]);
 
   function setTransform(dx: number, dy: number) {
-    // Smooth visual feedback without re-render
+    // Apply a temporary transform during dragging; avoids re-rendering the
+    // whole component on every mousemove event for better responsiveness
     if (!noteRef.current) return;
     noteRef.current.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
   }
@@ -72,6 +76,7 @@ export function NoteView({
   function beginPointer(e: React.PointerEvent, mode: DragMode) {
     if (!boardBounds) return;
 
+    // Bring this note to the top of z-order as soon as interaction starts
     onBringToFront(note.id);
     modeRef.current = mode;
 

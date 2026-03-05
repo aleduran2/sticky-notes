@@ -1,4 +1,6 @@
 
+// Toolbar contains primary actions: add a default note and clear all. It also hosts the quick tips help icon.
+
 import { TEXTS } from "../constants/text";
 
 type Props = {
@@ -13,7 +15,13 @@ export function Toolbar({ onCreateDefault, onClear }: Props) {
 
         <div className="tooltipWrapper">
           <button onClick={onCreateDefault}>{TEXTS.NEW_NOTE_BUTTON}</button>
+        </div>
 
+        <button onClick={onClear}>{TEXTS.CLEAR_BUTTON}</button>
+
+        {/* help icon for quick tips */}
+        <div className="tooltipWrapper helpIcon">
+          <button aria-label="Quick tips">?</button>
           <div className="tooltip">
             <div className="tipsTitle">{TEXTS.QUICK_TIPS_TITLE}</div>
 
@@ -25,8 +33,6 @@ export function Toolbar({ onCreateDefault, onClear }: Props) {
             </ul>
           </div>
         </div>
-
-        <button onClick={onClear}>{TEXTS.CLEAR_BUTTON}</button>
 
       </div>
     </div>

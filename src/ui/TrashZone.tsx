@@ -1,3 +1,6 @@
+// TrashZone renders a drop target in the bottom-right corner. The parent component passes a ref so it can compute its location for hit
+// testing, and an `active` flag to highlight when a note is hovering over it.
+
 import React from "react";
 import { TEXTS } from "../constants/text";
 

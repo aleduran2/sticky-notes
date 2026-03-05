@@ -1,3 +1,7 @@
+// Root application component: sets up reducer-based state, persistence
+// and renders toolbar + board. All actions flow through dispatch to keep
+// components stateless and easy to test.
+
 import { useEffect, useMemo, useReducer } from "react";
 import { Board } from "../ui/Board";
 import { Toolbar } from "../ui/Toolbar";
@@ -7,16 +11,20 @@ import type { Rect } from "../domain/types";
 import { TEXTS } from "../constants/text";
 
 export default function App() {
+  // Lazy initializer: attempt to hydrate from storage first, fall back to
+  // an empty state. using the 3rd argument avoids running on every render.
   const [state, dispatch] = useReducer(notesReducer, undefined, () => {
     const restored = loadState();
     return restored ?? createInitialState();
   });
 
-  // Debounced-ish persistence (simple): save after state changes
+  // Persist state whenever it changes; cheap enough even if triggered
+  // frequently since JSON stringify is fast for small objects.
   useEffect(() => {
     saveState(state);
   }, [state]);
 
+  // Derive simple stats for display; memoized to avoid object churn
   const stats = useMemo(() => {
     return { count: state.notes.length };
   }, [state.notes.length]);

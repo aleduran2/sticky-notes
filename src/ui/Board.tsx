@@ -1,3 +1,8 @@
+// Board component is the main canvas where users can create,
+// drag, resize, and delete sticky notes. It handles pointer events
+// for drawing new notes as well as coordinates conversion and trash
+// hit-testing.
+
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import type { Note, Rect } from "../domain/types";
 import { applyMinSize, normalizeRect, rectFromClient, intersects } from "../domain/geometry";
@@ -6,13 +11,13 @@ import { NoteView } from "./NoteView";
 import { TrashZone } from "./TrashZone";
 
 type Props = {
-  notes: Note[];
-  onCreateRect: (rect: Rect) => void;
-  onCommitRect: (id: string, rect: Rect) => void;
-  onCommitText: (id: string, text: string) => void;
-  onBringToFront: (id: string) => void;
-  onDelete: (id: string) => void;
-};
+  notes: Note[]; // current notes stored in state
+  onCreateRect: (rect: Rect) => void; // callback when a new rect is drawn
+  onCommitRect: (id: string, rect: Rect) => void; // update existing note position/size
+  onCommitText: (id: string, text: string) => void; // update text
+  onBringToFront: (id: string) => void; // request to bring note above others
+  onDelete: (id: string) => void; // delete note
+};  
 
 export function Board({
   notes,
@@ -34,6 +39,7 @@ export function Board({
 
   const [overTrashNoteId, setOverTrashNoteId] = useState<string | null>(null);
 
+  // Keep track of board's pixel bounds for coordinate conversions
   useEffect(() => {
     const update = () => {
       if (!boardRef.current) return;
@@ -44,12 +50,14 @@ export function Board({
     return () => window.removeEventListener("resize", update);
   }, []);
 
+  // Render notes in z-index order so that higher z-index appear on top
   const sortedNotes = useMemo(() => {
     return [...notes].sort((a, b) => a.zIndex - b.zIndex);
   }, [notes]);
 
+  // Determine if the pointer event originated on the board itself rather
+  // than on a child element; prevents creating a note when interacting with existing notes.
   function isEmptyBoardPointerDown(target: EventTarget | null): boolean {
-    // start drawing only if you clicked directly on board (not on a note)
     return target === boardRef.current;
   }
 

@@ -55,7 +55,7 @@ describe("storage", () => {
 
       saveState(state);
 
-      const stored = localStorage.getItem("sticky_notes_v1");
+      const stored = localStorage.getItem("sticky_notes");
       expect(stored).toBeTruthy();
       expect(JSON.parse(stored!)).toEqual(state);
     });

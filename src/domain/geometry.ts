@@ -1,11 +1,18 @@
+// Geometry helper functions used throughout the app. These operate on
+// simple point/rect objects and are pure, deterministic utilities that
+// handle mouse coordinates, bounding boxes, and collision detection.
+
 import type { Point, Rect } from "./types";
 import { MIN_SIZE } from "./types";
 
 export function clamp(n: number, min: number, max: number): number {
+  // Constrain `n` between `min` and `max` inclusive
   return Math.max(min, Math.min(max, n));
 }
 
 export function normalizeRect(a: Point, b: Point): Rect {
+  // Convert two arbitrary points (drag start/end) into a normalized rect
+  // where width and height are positive and (x,y) is the top-left corner.
   const x1 = Math.min(a.x, b.x);
   const y1 = Math.min(a.y, b.y);
   const x2 = Math.max(a.x, b.x);
@@ -14,6 +21,7 @@ export function normalizeRect(a: Point, b: Point): Rect {
 }
 
 export function applyMinSize(rect: Rect, minSize = MIN_SIZE): Rect {
+  // Ensure a rectangle is at least `minSize` in both dimensions
   return {
     ...rect,
     w: Math.max(minSize, rect.w),
@@ -26,10 +34,11 @@ export function rectFromClient(
   clientY: number,
   boardBounds: DOMRect
 ): Point {
+  // Translate window coordinates into coordinates relative to the board
   return { x: clientX - boardBounds.left, y: clientY - boardBounds.top };
 }
 
-export function intersects(a: Rect, b: Rect): boolean {
+export function intersects(a: Rect, b: Rect): boolean {  
   return !(
     a.x + a.w < b.x ||
     a.x > b.x + b.w ||
