@@ -21,7 +21,15 @@ A modern web application for creating, managing, and organizing sticky notes wit
 
 ![App preview](./screenshots/app-preview.png)
 
-*A preview of the running application in the browser, showing several notes and the localStorage contents.*
+*Main interface - Sticky notes board with drag and drop functionality*
+
+![Help tooltip](./screenshots/app-preview-help.png)
+
+*Help icon showing quick tips and keyboard shortcuts*
+
+![Delete confirmation](./screenshots/app-preview-delete-confirmation.png)
+
+*Confirmation dialog for clearing all notes - User-friendly confirmation before destructive actions*
 
 ## Installation
 
