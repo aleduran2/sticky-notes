@@ -50,6 +50,23 @@ export function Board({
     return () => window.removeEventListener("resize", update);
   }, []);
 
+  // Keyboard shortcuts for accessibility
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl+N or Cmd+N to create a new note
+      if ((e.ctrlKey || e.metaKey) && e.key === "n") {
+        e.preventDefault();
+        // Create a note at a default position
+        const offset = (notes.length * 18) % 240;
+        const rect: Rect = { x: 40 + offset, y: 40 + offset, w: 220, h: 160 };
+        onCreateRect(rect);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [notes.length, onCreateRect]);
+
   // Render notes in z-index order so that higher z-index appear on top
   const sortedNotes = useMemo(() => {
     return [...notes].sort((a, b) => a.zIndex - b.zIndex);
@@ -140,6 +157,9 @@ export function Board({
     <div
       ref={boardRef}
       className="board"
+      role="application"
+      aria-label="Sticky notes board - drag to create notes, Ctrl+N to add new note"
+      tabIndex={0}
       onPointerDown={onBoardPointerDown}
       onPointerMove={onBoardPointerMove}
       onPointerUp={onBoardPointerUp}

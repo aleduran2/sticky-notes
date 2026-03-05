@@ -2,6 +2,8 @@
 
 A modern web application for creating, managing, and organizing sticky notes with a drag-and-drop interface built with React, TypeScript, and Vite.
 
+**GitHub Repository**: [https://github.com/aleduran2/sticky-notes](https://github.com/aleduran2/sticky-notes)
+
 ## Features
 
 - ✏️ **Create Notes**: Drag on the board to create new notes with custom sizes
@@ -11,6 +13,9 @@ A modern web application for creating, managing, and organizing sticky notes wit
 - 💾 **Persistent Storage**: All notes are automatically saved to browser localStorage
 - 🎨 **Color Coded**: Notes are automatically assigned different colors
 - 📐 **Responsive**: Works seamlessly on different screen sizes
+- 🛡️ **Error Resilience**: Error Boundary catches and handles runtime errors gracefully
+- ⌨️ **Keyboard Shortcuts**: Ctrl+N to create new notes
+- 📋 **Confirmation Dialogs**: User-friendly confirmation for destructive actions
 
 ## Screenshot
 
@@ -29,7 +34,7 @@ A modern web application for creating, managing, and organizing sticky notes wit
 
 1. **Clone the repository**
 ```bash
-git clone <repository-url>
+git clone https://github.com/aleduran2/sticky-notes.git
 cd sticky-notes
 ```
 
@@ -64,7 +69,9 @@ src/
 │   ├── Board.tsx     # Main canvas for notes
 │   ├── NoteView.tsx  # Individual note component
 │   ├── Toolbar.tsx   # Toolbar with actions
-│   └── TrashZone.tsx # Delete zone
+│   ├── TrashZone.tsx # Delete zone
+│   ├── ConfirmDialog.tsx # Confirmation modal
+│   └── ErrorBoundary.tsx # Error boundary wrapper
 ├── domain/           # Core business logic
 │   ├── types.ts      # TypeScript type definitions
 │   ├── reducer.ts    # State management reducer
@@ -92,6 +99,10 @@ The UI is built with a clear **separation of concerns**: the `Board` component m
 ### Persistence Layer
 
 The `storage.ts` module provides an abstraction layer for browser localStorage, with automatic JSON serialization and error handling. State changes are persisted automatically through a `useEffect` hook in the main App component, ensuring that any modifications to notes are instantly saved. The storage layer validates deserialized data to prevent corruption and gracefully handles errors when localStorage is unavailable, making the application resilient to storage failures.
+
+### Error Handling
+
+The application implements a **React Error Boundary** (`ErrorBoundary.tsx`) that wraps the entire application at the root level. This component catches any JavaScript errors that occur in child components, preventing the entire application from crashing. When an error is caught, a user-friendly error page is displayed with a "Refresh Page" button. In development mode, error details are shown for debugging purposes. This ensures a graceful degradation of the application even when unexpected errors occur.
 
 ## Technologies Used
 
@@ -126,68 +137,3 @@ Works in all modern browsers that support:
 - Efficient re-rendering with key-based lists
 - Debounced localStorage writes
 
-## Future Improvements
-
-- Multi-note selection
-- Collaborative editing
-- Note categories/tags
-- Export as image
-- Dark mode theme
-- Keyboard shortcuts
-
-## License
-
-MIT
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```

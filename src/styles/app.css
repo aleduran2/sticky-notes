@@ -452,3 +452,42 @@ button:focus-visible {
   border-color: var(--accent-hover);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
+
+/* Error Boundary */
+.errorBoundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: var(--bg);
+  color: var(--text);
+  text-align: center;
+}
+
+.errorBoundary h2 {
+  color: #ef4444;
+  margin-bottom: 1rem;
+}
+
+.errorBoundary p {
+  margin-bottom: 2rem;
+  max-width: 400px;
+}
+
+.errorBoundary button {
+  padding: 0.75rem 1.5rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.errorBoundary button:hover {
+  background: var(--accent-hover);
+}

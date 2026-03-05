@@ -22,7 +22,7 @@ type Props = {
 
 type DragMode = "none" | "move" | "resize";
 
-export function NoteView({
+export const NoteView = React.memo(function NoteView({
   note,
   boardBounds,
   onBringToFront,
@@ -182,4 +182,4 @@ export function NoteView({
       <div className="resizeHandle" onPointerDown={(e) => beginPointer(e, "resize")} />
     </div>
   );
-}
+});

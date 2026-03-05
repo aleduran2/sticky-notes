@@ -32,4 +32,8 @@ export const TEXTS = {
   CONFIRM_CLEAR_MESSAGE: "Do you want to clear the dashboard?",
   CONFIRM_YES: "Yes",
   CONFIRM_CANCEL: "Cancel",
+
+  // Error Boundary
+  ERROR_MESSAGE: "An unexpected error occurred. Please try refreshing the page.",
+  ERROR_RETRY: "Refresh Page",
 } as const;

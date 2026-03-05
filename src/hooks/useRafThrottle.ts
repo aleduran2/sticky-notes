@@ -1,11 +1,20 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
-export function useRafThrottle<T extends (...args: any[]) => void>(fn: T): T {
-  const fnRef = useRef(fn);
-  fnRef.current = fn;
+type ThrottledFunction<T extends (...args: unknown[]) => unknown> = (
+  ...args: Parameters<T>
+) => void;
 
+export function useRafThrottle<T extends (...args: unknown[]) => unknown>(
+  fn: T
+): ThrottledFunction<T> {
+  const fnRef = useRef<T>(fn);
   const frame = useRef<number | null>(null);
-  const lastArgs = useRef<any[] | null>(null);
+  const lastArgs = useRef<unknown[] | null>(null);
+
+  // Update the function ref when fn changes
+  useEffect(() => {
+    fnRef.current = fn;
+  }, [fn]);
 
   useEffect(() => {
     return () => {
@@ -13,7 +22,7 @@ export function useRafThrottle<T extends (...args: any[]) => void>(fn: T): T {
     };
   }, []);
 
-  const throttled = ((...args: any[]) => {
+  return useCallback((...args: unknown[]) => {
     lastArgs.current = args;
     if (frame.current != null) return;
 
@@ -21,7 +30,5 @@ export function useRafThrottle<T extends (...args: any[]) => void>(fn: T): T {
       frame.current = null;
       if (lastArgs.current) fnRef.current(...lastArgs.current);
     });
-  }) as T;
-
-  return throttled;
+  }, []) as ThrottledFunction<T>;
 }
