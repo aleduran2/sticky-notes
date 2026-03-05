@@ -27,4 +27,9 @@ export const TEXTS = {
   // Note View
   NOTE_TITLE: "Note",
   TEXTAREA_PLACEHOLDER: "Type here…",
+
+  // Confirmation Dialog
+  CONFIRM_CLEAR_MESSAGE: "Do you want to clear the dashboard?",
+  CONFIRM_YES: "Yes",
+  CONFIRM_CANCEL: "Cancel",
 } as const;
