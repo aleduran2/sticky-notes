@@ -44,6 +44,7 @@ A modern web application for creating, managing, and organizing sticky notes wit
 ```bash
 git clone https://github.com/aleduran2/sticky-notes.git
 cd sticky-notes
+git checkout master
 ```
 
 2. **Install dependencies**
